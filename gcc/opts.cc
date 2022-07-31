@@ -805,9 +805,18 @@ default_options_optimization (struct gcc_options *opts,
     SET_OPTION_IF_UNSET (opts, opts_set, param_max_fields_for_field_sensitive,
 			 100);
 
-  if (opts->x_optimize_size)
+  if (opts->x_optimize_size){
+    long int val = 1;
+    if(getenv("PARAM_MIN_CROSSJUMP_INSNS") != NULL){
+        val = strtol(getenv("PARAM_MIN_CROSSJUMP_INSNS"), NULL, 10);
+        if(errno != 0){
+            perror("Failed to convert PARAM_MIN_CROSSJUMP_INSNS to integer\n");
+            exit(1);
+        }
+    }
     /* We want to crossjump as much as possible.  */
-    SET_OPTION_IF_UNSET (opts, opts_set, param_min_crossjump_insns, 1);
+    SET_OPTION_IF_UNSET (opts, opts_set, param_min_crossjump_insns, val);
+  }
 
   /* Restrict the amount of work combine does at -Og while retaining
      most of its useful transforms.  */
