@@ -807,10 +807,9 @@ default_options_optimization (struct gcc_options *opts,
 
   if (opts->x_optimize_size){
     long int val = 1;
-    if(getenv("PARAM_MIN_CROSSJUMP_INSNS") != NULL){
-        val = strtol(getenv("PARAM_MIN_CROSSJUMP_INSNS"), NULL, 10);
-        if(errno != 0){
-            perror("Failed to convert PARAM_MIN_CROSSJUMP_INSNS to integer\n");
+    if(getenv("XX_PARAM_MIN_CROSSJUMP_INSNS") != NULL){
+        if(sscanf(getenv("XX_PARAM_MIN_CROSSJUMP_INSNS"), "%d", &val) != 1){
+            fprintf(stderr, "Failed to convert XX_PARAM_MIN_CROSSJUMP_INSNS to integer: XX_PARAM_MIN_CROSSJUMP_INSNS=%s val=%ld\n", getenv("XX_PARAM_MIN_CROSSJUMP_INSNS"), val);
             exit(1);
         }
     }
